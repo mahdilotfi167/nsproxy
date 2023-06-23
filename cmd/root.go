@@ -6,6 +6,8 @@ package cmd
 
 import (
 	"fmt"
+	"nsproxy/config"
+	"nsproxy/internal/server"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -28,10 +30,17 @@ So there is a huge load on DNS servers.
 nsproxy forwards DNS requests(only if needed) and replies between DNS clients and
 DNS servers.`,
 	Run: func(cmd *cobra.Command, args []string) {
+		addr := "0.0.0.0:53"
 		if len(args) > 0 {
-			addr := args[0]
-			fmt.Println(addr)
+			addr = args[0]
 		}
+		var conf config.ServerConfig
+		err := viper.Unmarshal(&conf)
+		if err != nil {
+			fmt.Fprintln(os.Stderr, "Bad config file")
+			return
+		}
+		server.RunServer(addr, &conf)
 	},
 }
 
