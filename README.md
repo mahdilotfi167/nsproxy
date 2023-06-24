@@ -8,6 +8,7 @@ A simple and lightweight DNS proxy
 ### Install from source
 
 ## Configuration
+You can override the following configurations in the `/etc/nsproxy.json` file.
 
 | Key                   | Description                                                                       | Default Value              |
 |-----------------------|-----------------------------------------------------------------------------------|----------------------------|

@@ -60,7 +60,7 @@ func init() {
 	// Cobra supports persistent flags, which, if defined here,
 	// will be global for your application.
 
-	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "", "config file (default is $HOME/.nsproxy.json)")
+	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "", "config file (default is /etc/nsproxy.json)")
 }
 
 // initConfig reads in config file and ENV variables if set.
@@ -69,14 +69,9 @@ func initConfig() {
 		// Use config file from the flag.
 		viper.SetConfigFile(cfgFile)
 	} else {
-		// Find home directory.
-		home, err := os.UserHomeDir()
-		cobra.CheckErr(err)
-
-		// Search config in home directory with name ".nsproxy" (without extension).
-		viper.AddConfigPath(home)
+		viper.AddConfigPath("/etc")
 		viper.SetConfigType("json")
-		viper.SetConfigName(".nsproxy")
+		viper.SetConfigName("nsproxy")
 	}
 
 	viper.AutomaticEnv() // read in environment variables that match
