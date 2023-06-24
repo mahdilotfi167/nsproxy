@@ -1,7 +1,8 @@
 {
   "cache-expiration-time": 300,
+  "cache-url": "redis://localhost:6379/0",
   "external-dns-servers": [
-    "8.8.8.8:53",
-    "4.2.2.4:53"
-  ]
+    "8.8.8.8:53"
+  ],
+  "external-dns-timeout": 1
 }
