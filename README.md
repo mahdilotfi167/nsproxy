@@ -1,6 +1,8 @@
 # NSProxy
-
-A simple and lightweight DNS proxy
+Nowadays, due to the huge increase in websites and people’s use of them, from a point-of-view of a network engineer, a Huge number of domains need to be resolved by DNS servers.  
+As an interesting fact, a typical home connected to the internet makes ~10k  DNS queries per day!  
+DNS proxy forwards DNS requests and replies between DNS clients and DNS servers.  
+![proxy.png](docs/proxy.png)
 
 ## Installation
 ### Run using docker (recommended)
