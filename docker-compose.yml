@@ -1,8 +1,7 @@
 version: '3'
 services:
   proxy:
-#    image: mahdilotfi/nsproxy:latest
-    build: .
+    image: mahdilotfi/nsproxy:latest
     restart: always
     ports:
       - "1053:53/udp"
