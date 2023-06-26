@@ -1,0 +1,18 @@
+version: '3'
+services:
+  proxy:
+#    image: mahdilotfi/nsproxy:latest
+    build: .
+    restart: always
+    ports:
+      - "1053:53/udp"
+    volumes:
+      - ./config.json:/etc/nsproxy.json
+  cache:
+    image: redis:6.2-alpine
+    restart: always
+    volumes:
+      - cache:/data
+volumes:
+  cache:
+    driver: local
