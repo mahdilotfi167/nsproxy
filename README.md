@@ -4,6 +4,13 @@ A simple and lightweight DNS proxy
 
 ## Installation
 ### Run using docker (recommended)
+- (Optional) Create config file `config.json` with the appropriate config values
+- Run a container using the following command (Change options as desired)  
+` docker run -d -p 1053:53/udp --name=mynsproxy -v ./config.json:/etc/nsproxy.json mahdilotfi/nsproxy:latest`
+
+### Docker compose (persistent cache)
+- (Optional) Edit file `config.json` with the appropriate values
+- Run required containers using `docker compose up -f docker-compose.yml up -d`
 
 ### Install from source
 
