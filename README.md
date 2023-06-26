@@ -15,6 +15,10 @@ DNS proxy forwards DNS requests and replies between DNS clients and DNS servers.
 - Run required containers using `docker compose up -f docker-compose.yml up -d`
 
 ### Install from source
+- Run `sudo make install` to build and install the project
+- Run `sudo systemctl start nsproxy` to start the server
+#### Uninstallation
+- Run `sudo make uninstall` to stop and remove installed files
 
 ## Configuration
 You can override the following configurations in the `/etc/nsproxy.json` file.
