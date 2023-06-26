@@ -1,3 +1,7 @@
+/*
+Copyright © 2023 Mahdi Lotfi mahdilotfi167@gmail.com
+*/
+
 package cache
 
 import (
