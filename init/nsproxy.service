@@ -1,0 +1,11 @@
+[Unit]
+Description=DNS Proxy Service
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/nsproxy
+Restart=always
+User=root
+
+[Install]
+WantedBy=multi-user.target
