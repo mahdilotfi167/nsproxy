@@ -7,6 +7,7 @@ package cmd
 import (
 	"fmt"
 	"nsproxy/config"
+	"nsproxy/internal/cache"
 	"nsproxy/internal/server"
 	"os"
 
@@ -34,13 +35,23 @@ DNS servers.`,
 		if len(args) > 0 {
 			addr = args[0]
 		}
-		var conf config.ServerConfig
-		err := viper.Unmarshal(&conf)
-		if err != nil {
+
+		var serverConfig config.ServerConfig
+		if err := viper.Unmarshal(&serverConfig); err != nil {
 			fmt.Fprintln(os.Stderr, "Bad config file")
 			return
 		}
-		server.RunServer(addr, &conf)
+
+		var cacheConfig config.CacheConfig
+		if err := viper.Unmarshal(&cacheConfig); err != nil {
+			fmt.Fprintln(os.Stderr, "Bad config file")
+			return
+		}
+
+		cacheManager := cache.NewCacheManager(&cacheConfig)
+
+		server := server.NewServer(addr, &serverConfig, cacheManager)
+		server.Run()
 	},
 }
 

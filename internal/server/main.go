@@ -5,13 +5,29 @@ Copyright © 2023 Mahdi Lotfi mahdilotfi167@gmail.com
 package server
 
 import (
+	"context"
+	"github.com/eko/gocache/lib/v4/cache"
 	"log"
 	"net"
 	"nsproxy/config"
 )
 
-func RunServer(addr string, config *config.ServerConfig) {
-	udpAddr, err := net.ResolveUDPAddr("udp", addr)
+type Server struct {
+	addr   string
+	config *config.ServerConfig
+	cache  *cache.Cache[string]
+}
+
+func NewServer(addr string, config *config.ServerConfig, cache *cache.Cache[string]) *Server {
+	return &Server{
+		addr:   addr,
+		config: config,
+		cache:  cache,
+	}
+}
+
+func (s *Server) Run() {
+	udpAddr, err := net.ResolveUDPAddr("udp", s.addr)
 	if err != nil {
 		log.Fatalf("Failed to resolve UDP address: %v", err)
 	}
@@ -22,7 +38,7 @@ func RunServer(addr string, config *config.ServerConfig) {
 	}
 	defer conn.Close()
 
-	log.Println("DNS Proxy server started on", addr)
+	log.Println("DNS Proxy server started on", s.addr)
 
 	buffer := make([]byte, 512)
 	for {
@@ -32,11 +48,12 @@ func RunServer(addr string, config *config.ServerConfig) {
 			continue
 		}
 
-		go handleDNSRequest(conn, addr, buffer[:n])
+		ctx := context.Background()
+		go s.handleDNSRequest(ctx, conn, addr, buffer[:n])
 	}
 }
 
-func handleDNSRequest(conn *net.UDPConn, addr *net.UDPAddr, request []byte) {
+func (s *Server) handleDNSRequest(ctx context.Context, conn *net.UDPConn, addr *net.UDPAddr, request []byte) {
 	// Forward the DNS request to an upstream DNS server
 	upstreamAddr, err := net.ResolveUDPAddr("udp", "8.8.8.8:53")
 	if err != nil {
