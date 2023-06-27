@@ -36,6 +36,7 @@ You can override the following configurations in the `/etc/nsproxy.json` file.
 - [ ] Additional info from cache
 - [ ] Generic wildcard matching
 - [ ] Fast recovery on external cache failure
+- [ ] Case-insensitive matching
 
 ## Additional Info & References
 
