@@ -2,7 +2,7 @@
 ![Build Release Status](https://github.com/mahdilotfi167/nsproxy/actions/workflows/ci.build.release.yml/badge.svg)  
 Nowadays, with the significant increase in websites and people's usage of them, DNS servers have to handle a huge number of domain resolution requests. It is interesting to note that a typical home connected to the internet generates around 10,000 DNS queries per day!
 
-DNS proxy acts as an intermediary between DNS clients and DNS servers, forwarding DNS requests and replies.
+DNS proxy acts as an intermediary between DNS clients and DNS servers, forwarding DNS requests and replies.  
 ![proxy.png](docs/proxy.png)
 
 ## Installation
