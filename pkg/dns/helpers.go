@@ -1,10 +1,12 @@
 package dns
 
 import (
+	"bytes"
 	"encoding/binary"
+	"strings"
 )
 
-func ParseMessage(data []byte) Message {
+func ParseMessage(data []byte) (*Message, error) {
 	var msg Message
 
 	// Parse the DNS header
@@ -50,7 +52,7 @@ func ParseMessage(data []byte) Message {
 		additionalIndex = newIndex
 	}
 
-	return msg
+	return &msg, nil
 }
 
 func parseFlags(flags uint16) Flags {
@@ -142,4 +144,124 @@ func parseDomainName(data []byte, index int) (string, int) {
 	}
 
 	return domainName, currentIndex + 1
+}
+
+func (msg *Message) ToBytes() []byte {
+	var buf bytes.Buffer
+
+	// Write the ID field
+	binary.Write(&buf, binary.BigEndian, msg.ID)
+
+	// Write the flags field
+	flags := msg.Flags.ToUint16()
+	binary.Write(&buf, binary.BigEndian, flags)
+
+	// Write the questions count
+	binary.Write(&buf, binary.BigEndian, uint16(len(msg.Questions)))
+
+	// Write the answers count
+	binary.Write(&buf, binary.BigEndian, uint16(len(msg.Answers)))
+
+	// Write the authority RRs count
+	binary.Write(&buf, binary.BigEndian, uint16(len(msg.AuthorityRecords)))
+
+	// Write the additional RRs count
+	binary.Write(&buf, binary.BigEndian, uint16(len(msg.AdditionalRecords)))
+
+	// Write the questions
+	for _, question := range msg.Questions {
+		buf.Write(question.ToBytes())
+	}
+
+	//Write the answers, authority RRs, and additional RRs
+	for _, rr := range msg.Answers {
+		buf.Write(rr.ToBytes())
+	}
+	for _, rr := range msg.AuthorityRecords {
+		buf.Write(rr.ToBytes())
+	}
+	for _, rr := range msg.AdditionalRecords {
+		buf.Write(rr.ToBytes())
+	}
+
+	return buf.Bytes()
+}
+
+func (f Flags) ToUint16() uint16 {
+	var value uint16
+
+	value |= uint16(f.ResponseCode)
+	value |= uint16(f.Z) << 4
+	if f.RA {
+		value |= 1 << 7
+	}
+	if f.RD {
+		value |= 1 << 8
+	}
+	if f.TC {
+		value |= 1 << 9
+	}
+	if f.AA {
+		value |= 1 << 10
+	}
+	value |= uint16(f.Opcode) << 11
+	if f.QR {
+		value |= 1 << 15
+	}
+
+	return value
+}
+
+func (q Question) ToBytes() []byte {
+	var buf bytes.Buffer
+
+	// Write the domain name
+	buf.Write(encodeDomainName(q.Name))
+
+	// Write the question type
+	binary.Write(&buf, binary.BigEndian, q.Type)
+
+	// Write the question class
+	binary.Write(&buf, binary.BigEndian, q.Class)
+
+	return buf.Bytes()
+}
+
+func (rr ResourceRecord) ToBytes() []byte {
+	var buf bytes.Buffer
+
+	// Write the domain name
+	buf.Write(encodeDomainName(rr.Name))
+
+	// Write the record type
+	binary.Write(&buf, binary.BigEndian, rr.Type)
+
+	// Write the record class
+	binary.Write(&buf, binary.BigEndian, rr.Class)
+
+	// Write the record TTL
+	binary.Write(&buf, binary.BigEndian, rr.TTL)
+
+	// Write the record data length
+	dataLength := uint16(len(rr.Data))
+	binary.Write(&buf, binary.BigEndian, dataLength)
+
+	// Write the record data
+	buf.Write(rr.Data)
+
+	return buf.Bytes()
+}
+
+func encodeDomainName(name string) []byte {
+	var buf bytes.Buffer
+
+	labels := strings.Split(strings.TrimSuffix(name, "."), ".")
+	for _, label := range labels {
+		buf.WriteByte(uint8(len(label)))
+		buf.WriteString(label)
+	}
+
+	buf.WriteByte(0x00) // Null terminator
+
+	return buf.Bytes()
 }

@@ -11,7 +11,20 @@ const (
 	MX    uint16 = 15
 	TXT   uint16 = 16
 	AAAA  uint16 = 28
-	IN    uint16 = 1
-	CH    uint16 = 3
-	ALL   uint16 = 255
+)
+
+const (
+	IN uint16 = 1
+	CH uint16 = 3
+)
+
+const ALL uint16 = 255
+
+const (
+	NO_ERROR        uint8 = 0
+	FORMAT_ERROR    uint8 = 1
+	SERVER_FAILURE  uint8 = 2
+	NAME_ERROR      uint8 = 3
+	NOT_IMPLEMENTED uint8 = 4
+	REFUSED         uint8 = 5
 )
