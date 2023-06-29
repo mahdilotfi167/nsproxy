@@ -33,12 +33,22 @@ You can override the following configurations in the `/etc/nsproxy.json` file.
 | external-dns-servers  | A list of external servers utilized to resolve unresolved DNS requests            | ["8.8.8.8:53"]             |
 | external-dns-timeout  | The expiration time for an external DNS request before attempting the next server | 0 (means no timeout)       |
 
+## Support
+### Query types
+- A
+- AAA
+- NS
+- MX
+- TXT
+- CNAME
+
 ## Upcoming
 
 - [ ] Additional info from cache
 - [ ] Generic wildcard matching
 - [ ] Fast recovery on external cache failure
 - [ ] Case-insensitive matching
+- [ ] Name compression
 
 ## Additional Info & References
 
