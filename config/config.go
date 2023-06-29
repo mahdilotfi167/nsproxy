@@ -5,8 +5,9 @@ Copyright © 2023 Mahdi Lotfi mahdilotfi167@gmail.com
 package config
 
 type ServerConfig struct {
-	ExternalDNSServers []string `mapstructure:"external-dns-servers"`
-	ExternalDNSTimeout uint     `mapstructure:"external-dns-timeout"`
+	ExternalDNSServers  []string `mapstructure:"external-dns-servers"`
+	ExternalDNSTimeout  uint     `mapstructure:"external-dns-timeout"`
+	CacheExpirationTime uint     `mapstructure:"cache-expiration-time"`
 }
 
 type CacheConfig struct {

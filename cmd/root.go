@@ -67,15 +67,14 @@ func Execute() {
 func init() {
 	cobra.OnInitialize(initConfig)
 
-	// Here you will define your flags and configuration settings.
-	// Cobra supports persistent flags, which, if defined here,
-	// will be global for your application.
-
 	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "", "config file (default is /etc/nsproxy.json)")
 }
 
 // initConfig reads in config file and ENV variables if set.
 func initConfig() {
+	viper.SetDefault("cache-expiration-time", 60*60*24)
+	viper.SetDefault("external-dns-servers", []string{"8.8.8.8:53"})
+
 	if cfgFile != "" {
 		// Use config file from the flag.
 		viper.SetConfigFile(cfgFile)

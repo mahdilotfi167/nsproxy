@@ -112,6 +112,19 @@ func parseResourceRecord(data []byte, index int) (ResourceRecord, int) {
 	return record, newIndex
 }
 
+func ParseResourceRecords(buffer []byte) []ResourceRecord {
+	index := 0
+	var records []ResourceRecord
+
+	for index < len(buffer) {
+		answer, newIndex := parseResourceRecord(buffer, index)
+		records = append(records, answer)
+		index = newIndex
+	}
+
+	return records
+}
+
 func parseDomainName(data []byte, index int) (string, int) {
 	var domainName string
 	var currentIndex = index
