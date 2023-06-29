@@ -44,8 +44,8 @@ func (s *Server) Run() {
 
 	log.Println("DNS Proxy server started on", s.addr)
 
-	buffer := make([]byte, 512)
 	for {
+		buffer := make([]byte, 512)
 		n, addr, err := conn.ReadFromUDP(buffer)
 		if err != nil {
 			log.Printf("Error reading UDP packet: %v", err)
